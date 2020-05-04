@@ -113,7 +113,7 @@ $github->authenticate();
 
 $userProfile = $github->getUserProfile();
 
-echo 'Hi '.$userProfile->displayName;
+echo htmlspecialchars('Hi '.$userProfile->displayName);
 
 /**
  * Bonus: Access GitHub API
@@ -166,7 +166,7 @@ try {
  */
 
 catch (Hybridauth\Exception\HttpClientFailureException $e) {
-    echo 'Curl text error message : '.$github->getHttpClient()->getResponseClientError();
+    echo htmlspecialchars('Curl text error message : '.$github->getHttpClient()->getResponseClientError());
 }
 
 /**
@@ -178,7 +178,7 @@ catch (Hybridauth\Exception\HttpClientFailureException $e) {
  */
 
 catch (Hybridauth\Exception\HttpRequestFailedException $e) {
-    echo 'Raw API Response: '.$github->getHttpClient()->getResponseBody();
+    echo htmlspecialchars('Raw API Response: '.$github->getHttpClient()->getResponseBody());
 }
 
 /**
@@ -186,5 +186,5 @@ catch (Hybridauth\Exception\HttpRequestFailedException $e) {
  */
 
 catch (\Exception $e) {
-    echo 'Oops! We ran into an unknown issue: '.$e->getMessage();
+    echo htmlspecialchars('Oops! We ran into an unknown issue: '.$e->getMessage());
 }

@@ -29,5 +29,5 @@ try {
     $adapter->disconnect();
 }
 catch( Exception $e ){
-    echo $e->getMessage();
+    echo htmlspecialchars($e->getMessage());
 }

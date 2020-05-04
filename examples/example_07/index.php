@@ -37,8 +37,8 @@ $adapters = $hybridauth->getConnectedAdapters();
 <?php foreach ($hybridauth->getProviders() as $name) : ?>
     <?php if (!isset($adapters[$name])) : ?>
         <li>
-            <a href="#" onclick="javascript:auth_popup('<?php print $name ?>');">
-                Sign in with <?php print $name ?>
+            <a href="#" onclick="javascript:auth_popup('<?php echo htmlspecialchars($name) ?>');">
+                Sign in with <?php echo htmlspecialchars($name) ?>
             </a>
         </li>
     <?php endif; ?>
@@ -51,9 +51,9 @@ $adapters = $hybridauth->getConnectedAdapters();
     <ul>
         <?php foreach ($adapters as $name => $adapter) : ?>
             <li>
-                <strong><?php print $adapter->getUserProfile()->displayName; ?></strong> from
-                <i><?php print $name; ?></i>
-                <span>(<a href="<?php print $config['callback'] . "?logout={$name}"; ?>&nonce=<?php echo htmlspecialchars($_SESSION['nonce']); ?>">Log Out</a>)</span>
+                <strong><?php echo htmlspecialchars($adapter->getUserProfile()->displayName); ?></strong> from
+                <i><?php echo htmlspecialchars($name); ?></i>
+                <span>(<a href="<?php echo htmlspecialchars($config['callback'] . "?logout=$name"); ?>&nonce=<?php echo htmlspecialchars($_SESSION['nonce']); ?>">Log Out</a>)</span>
             </li>
         <?php endforeach; ?>
     </ul>

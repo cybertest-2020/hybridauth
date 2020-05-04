@@ -56,5 +56,5 @@ try {
      */
     HttpClient\Util::redirect('https://path/to/hybridauth/examples/example_06');
 } catch (Exception $e) {
-    echo $e->getMessage();
+    echo htmlspecialchars($e->getMessage());
 }

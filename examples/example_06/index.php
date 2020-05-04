@@ -27,8 +27,8 @@ $adapters = $hybridauth->getConnectedAdapters();
     <?php foreach ($hybridauth->getProviders() as $name) : ?>
         <?php if (!isset($adapters[$name])) : ?>
             <li>
-                <a href="<?php print $config['callback'] . "?provider={$name}"; ?>&nonce=<?php echo htmlspecialchars($_SESSION['nonce']); ?>">
-                    Sign in with <strong><?php print $name; ?></strong>
+                <a href="<?php echo htmlspecialchars($config['callback'] . "?provider=$name"); ?>&nonce=<?php echo htmlspecialchars($_SESSION['nonce']); ?>">
+                    Sign in with <strong><?php echo htmlspecialchars($name); ?></strong>
                 </a>
             </li>
         <?php endif; ?>
@@ -40,9 +40,9 @@ $adapters = $hybridauth->getConnectedAdapters();
     <ul>
         <?php foreach ($adapters as $name => $adapter) : ?>
             <li>
-                <strong><?php print $adapter->getUserProfile()->displayName; ?></strong> from
-                <i><?php print $name; ?></i>
-                <span>(<a href="<?php print $config['callback'] . "?logout={$name}"; ?>&nonce=<?php echo htmlspecialchars($_SESSION['nonce']); ?>">Log Out</a>)</span>
+                <strong><?php echo htmlspecialchars($adapter->getUserProfile()->displayName); ?></strong> from
+                <i><?php echo htmlspecialchars($name); ?></i>
+                <span>(<a href="<?php echo htmlspecialchars($config['callback'] . "?logout=$name"); ?>&nonce=<?php echo htmlspecialchars($_SESSION['nonce']); ?>">Log Out</a>)</span>
             </li>
         <?php endforeach; ?>
     </ul>
