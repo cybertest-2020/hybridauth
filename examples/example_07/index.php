@@ -2,6 +2,8 @@
 /**
  * Build a simple HTML page with multiple providers, opening provider authentication in a pop-up.
  */
+@session_start();
+$_SESSION['nonce'] = bin2hex(random_bytes(32));
 
 require 'path/to/vendor/autoload.php';
 require 'config.php';
@@ -21,7 +23,7 @@ $adapters = $hybridauth->getConnectedAdapters();
     <script>
         function auth_popup( provider ){
             // replace 'path/to/hybridauth' with the real path to this script
-            var authWindow = window.open('https://path/to/hybridauth/examples/example_07/callback.php?provider='+provider, 'authWindow', 'width=600,height=400,scrollbars=yes');
+            var authWindow = window.open('https://path/to/hybridauth/examples/example_07/callback.php?provider='+provider+'&nonce=<?php echo htmlspecialchars($_SESSION['nonce']); ?>', 'authWindow', 'width=600,height=400,scrollbars=yes');
             return false;
         }
     </script>
@@ -51,7 +53,7 @@ $adapters = $hybridauth->getConnectedAdapters();
             <li>
                 <strong><?php print $adapter->getUserProfile()->displayName; ?></strong> from
                 <i><?php print $name; ?></i>
-                <span>(<a href="<?php print $config['callback'] . "?logout={$name}"; ?>">Log Out</a>)</span>
+                <span>(<a href="<?php print $config['callback'] . "?logout={$name}"; ?>&nonce=<?php echo htmlspecialchars($_SESSION['nonce']); ?>">Log Out</a>)</span>
             </li>
         <?php endforeach; ?>
     </ul>

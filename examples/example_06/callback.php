@@ -2,6 +2,7 @@
 /**
  * A simple example that shows how to use multiple providers.
  */
+@session_start();
 
 include 'vendor/autoload.php';
 include 'config.php';
@@ -25,8 +26,8 @@ try {
     /**
      * Hold information about provider when user clicks on Sign In.
      */
-    if (isset($_GET['provider'])) {
-        $storage->set('provider', $_GET['provider']);
+    if (!empty(filter_input(INPUT_GET, 'provider')) && hash_equals($_SESSION["nonce"], filter_input(INPUT_GET, 'nonce'))) {
+        $storage->set('provider', filter_input(INPUT_GET, 'provider'));
     }
 
     /**
@@ -45,8 +46,8 @@ try {
      * This will erase the current user authentication data from session, and any further
      * attempt to communicate with provider.
      */
-    if (isset($_GET['logout'])) {
-        $adapter = $hybridauth->getAdapter($_GET['logout']);
+    if (!empty(filter_input(INPUT_GET, 'logout')) && hash_equals($_SESSION["nonce"], filter_input(INPUT_GET, 'nonce'))) {
+        $adapter = $hybridauth->getAdapter(filter_input(INPUT_GET, 'logout'));
         $adapter->disconnect();
     }
 

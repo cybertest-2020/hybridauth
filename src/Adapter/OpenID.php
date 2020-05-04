@@ -7,6 +7,8 @@
 
 namespace Hybridauth\Adapter;
 
+@session_start();
+
 use Hybridauth\Exception\InvalidOpenidIdentifierException;
 use Hybridauth\Exception\AuthorizationDeniedException;
 use Hybridauth\Exception\InvalidOpenidResponseException;
@@ -82,10 +84,22 @@ abstract class OpenID extends AbstractAdapter implements AdapterInterface
             return true;
         }
 
-        if (empty($_REQUEST['openid_mode'])) {
-            $this->authenticateBegin();
+        if (!isset($_SESSION['nonceArray'])) {
+            $_SESSION["nonceArray"] = array();
+        }
+
+        if (!empty(filter_input(INPUT_POST, 'openid_response_nonce'))) {
+            $nonce = filter_input(INPUT_POST, 'openid_response_nonce');
         } else {
+            $nonce = filter_input(INPUT_GET, 'openid_response_nonce');
+        }
+
+        if ((!empty(filter_input(INPUT_POST, 'openid_mode')) && !in_array($nonce, $_SESSION["nonceArray"], TRUE))
+        || (!empty(filter_input(INPUT_GET, 'openid_mode')) && !in_array($nonce, $_SESSION["nonceArray"], TRUE))) {
+            array_push($_SESSION["nonceArray"], $nonce);
             return $this->authenticateFinish();
+        } else {
+            $this->authenticateBegin();
         }
 
         return null;

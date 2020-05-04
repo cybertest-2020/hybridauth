@@ -2,6 +2,7 @@
 /**
  * A simple example that shows how to use multiple providers, opening provider authentication in a pop-up.
  */
+@session_start();
 
 require 'path/to/vendor/autoload.php';
 require 'config.php';
@@ -20,26 +21,26 @@ try {
     //
     // Event 1: User clicked SIGN-IN link
     //
-    if (isset($_GET['provider'])) {
+    if (!empty(filter_input(INPUT_GET, 'provider')) && hash_equals($_SESSION["nonce"], filter_input(INPUT_GET, 'nonce'))) {
         // Validate provider exists in the $config
-        if (in_array($_GET['provider'], $hybridauth->getProviders())) {
+        if (in_array(filter_input(INPUT_GET, 'provider'), $hybridauth->getProviders())) {
             // Store the provider for the callback event
-            $storage->set('provider', $_GET['provider']);
+            $storage->set('provider', filter_input(INPUT_GET, 'provider'));
         } else {
-            $error = $_GET['provider'];
+            $error = filter_input(INPUT_GET, 'provider');
         }
     }
 
     //
     // Event 2: User clicked LOGOUT link
     //
-    if (isset($_GET['logout'])) {
-        if (in_array($_GET['logout'], $hybridauth->getProviders())) {
+    if (!empty(filter_input(INPUT_GET, 'logout')) && hash_equals($_SESSION["nonce"], filter_input(INPUT_GET, 'nonce'))) {
+        if (in_array(filter_input(INPUT_GET, 'logout'), $hybridauth->getProviders())) {
             // Disconnect the adapter
-            $adapter = $hybridauth->getAdapter($_GET['logout']);
+            $adapter = $hybridauth->getAdapter(filter_input(INPUT_GET, 'logout'));
             $adapter->disconnect();
         } else {
-            $error = $_GET['logout'];
+            $error = filter_input(INPUT_GET, 'logout');
         }
     }
 
